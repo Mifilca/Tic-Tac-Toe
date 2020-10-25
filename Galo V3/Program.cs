@@ -4,12 +4,31 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Galo_V3
 {
+    class Jogador
+    {
+        public string Nome { get; set; }
+        public int  Idade { get; set; }
+        public int Vitorias { get; set; }
+    }
     class Program
     {
        static bool Jogou = false;
        static int Rondas = 0;
+       static char[,] Matrix = GeraArray();
 
-        static void Main()
+        static char[,] GeraArray()
+        {
+            char[,] Matrix = new char[,]
+        {
+                //      0   1   2   
+               /*0*/ { '7','8','9' },
+               /*1*/ { '4','5','6' },
+               /*2*/ { '1','2','3' }
+        };
+            return Matrix;
+        }
+
+            static void Main()
         {
             Console.Title = "Tic Tac Toe";
             Rondas = 0;
@@ -19,17 +38,31 @@ namespace Galo_V3
             char Player = ' ';
 
 
+            Jogador Jogador1 = new Jogador();
+            Jogador Jogador2 = new Jogador();
 
-            char[,] Matrix = new char[,]
-{
-                //      0   1   2   
-               /*0*/ { '7','8','9' },
-               /*1*/ { '4','5','6' },
-               /*2*/ { '1','2','3' }
-};
+            Jogador1.Vitorias = 0; 
+            Jogador2.Vitorias = 0;
 
-            while (GameEnd(Matrix, Player, Rondas) == 0)
+            Console.WriteLine("Jogador 1 escreve o teu nome");
+            Jogador1.Nome = Console.ReadLine();
+            //Console.WriteLine("Jogador 1 escreve o tua idade");
+            //Jogador1.Idade = Convert.ToInt16(Console.ReadLine());
+            // int.TryParse(Console.ReadLine(), out Jogador1.Idade);
+            Console.WriteLine("Jogador 2 escreve o teu nome");
+            Jogador2.Nome = Console.ReadLine();
+            //Console.WriteLine("Jogador 2 escreve o tua idade");
+            //Jogador2.Idade = Convert.ToInt16(Console.ReadLine());
+
+
+
+
+
+            // GameEnd(Matrix, Player, Rondas) == 0
+
+            while (true)
             {
+                
                 Player = (Rondas % 2 == 0) ? Player1 : Player2;
                 PrintBoard(Matrix);
                 int.TryParse(Console.ReadLine(), out int Opcoes);
@@ -42,13 +75,24 @@ namespace Galo_V3
                 }
                 if (GameEnd(Matrix, Player, Rondas) == 1)
                 {
-                    Console.WriteLine("{0} Ganhou o Jogo !!!", Player);
-                    JogarNovamente();
+                    if (Player == Player1)
+                    {
+                        Jogador1.Vitorias++;
+                        Console.WriteLine("{0} ganhou o jogo e já tem {1} vitorias no total enquanto {2} tem no total {3} vitorias!!!", Jogador1.Nome, Jogador1.Vitorias, Jogador2.Nome, Jogador2.Vitorias);
+                    }
+                    if (Player == Player2)
+                    {
+                        Jogador2.Vitorias++;
+                        Console.WriteLine("{0} ganhou o jogo e já tem {1} vitorias no total enquanto {2} tem no total {3} vitorias!!!", Jogador2.Nome, Jogador2.Vitorias, Jogador1.Nome, Jogador1.Vitorias);
+                    }
+                    Matrix = GeraArray();
+                    JogarNovamente(Matrix);
                 }
                 if (GameEnd(Matrix, Player, Rondas) == 2)
                 {
                     Console.WriteLine("Jogo Empatado !!!");
-                    JogarNovamente();
+                    Matrix = GeraArray();
+                    JogarNovamente(Matrix);
 
                 }
             }
@@ -57,15 +101,15 @@ namespace Galo_V3
                 
         }
 
-        static void JogarNovamente() 
+        static void JogarNovamente(char[,] Matrix) 
         {
             Console.WriteLine("Quer jogar novamente ?");
             Console.WriteLine("1 - Yes | 2 - Exit");
             int Opcoes = Convert.ToInt16(Console.ReadLine());
             if (Opcoes == 1)
             {
-                Main();
-            }
+                    Rondas = 0;
+                }
             if (Opcoes == 2)
             {
                 Environment.Exit(0);
